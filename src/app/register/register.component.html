@@ -1,0 +1,35 @@
+<div class="container">
+  <h1>Create User</h1>
+  <form [formGroup]="userForm">
+      <div>
+        <label for="name">Username</label>
+        <br>
+        <input formControlName="username" type="text" id="name" name="name">
+        <br>
+        <span ngClass="text-danger mt-3" *ngIf="userForm.get('username')?.touched || userForm.get('username')?.dirty">
+          <span *ngIf="userForm.get('username')?.errors?.['required']">
+            Invalid Username
+          </span>
+          <span *ngIf="userForm.get('username')?.errors?.['minlength']">
+            Minimum 6 characters
+          </span>
+          <span *ngIf="userExistvar">
+            Username already exist
+          </span>
+        </span>
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <br>
+        <input formControlName="password" type="text" id="password" name="password">
+        <br>
+        <span ngClass="text-danger mt-3" *ngIf="userForm.get('password')?.touched || userForm.get('password')?.dirty">
+          <span *ngIf="userForm.get('password')?.errors?.['required']">
+            Invalid Password
+          </span>
+        </span>
+      </div>
+      <button (click)="onCreate()" class="btn btn-success mt-3" type="button" >Create</button>
+  </form>
+
+</div>

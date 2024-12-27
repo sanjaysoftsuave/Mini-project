@@ -1,0 +1,26 @@
+<div class="container m-5">
+    <h1>Login Form</h1>
+    <form #form="ngForm" (submit)="onSubmit(form)" class="mt-5">
+        <div class="form-group">
+            <label class="form-label" for="name">Username </label>
+            <input #userName="ngModel" name="username" [(ngModel)]="username" class="form-control" placeholder="Enter Username" type="text" id="name" required minlength="6">
+            <span class="text-danger" *ngIf="!userName.valid && (userName.touched || userName.dirty)">
+                <span *ngIf="userName.errors?.['minlength']">Minimum 6 characters</span>
+                <span *ngIf="userName.errors?.['required']">Invalid Username</span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="password">Password </label>
+            <input #passWord="ngModel" name="password" [(ngModel)]="password" class="form-control mb-3" placeholder="Enter Password" type="text"
+                id="password" required>
+            <span class="text-danger" *ngIf="(!passWord.valid && (passWord.touched || passWord.dirty)) || invalidPassword">
+                Invalid Password
+            </span>
+            <!-- <span *ngIf="invalidPassword">Invalid Password</span> -->
+        </div>
+        <a routerLink="/register" class="text-primary">Register account</a>
+        <br>
+        <button type="submit" class="btn btn-success mt-3">Login</button>
+    </form>
+</div>
+
