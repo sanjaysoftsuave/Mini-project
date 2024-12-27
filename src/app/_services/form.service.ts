@@ -26,7 +26,7 @@ export class FormService {
 
   addTask(task: any){
     // this.taskList.push(task);
-    return this.http.post(this.apiUrl+ "tasklist/" +this.name, task )
+    return this.http.post(`${this.apiUrl}tasklist/${this.name}`, task )
   }
 
   login(username: string,password : string): Observable<any> {
