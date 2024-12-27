@@ -7,26 +7,44 @@ import { Observable } from 'rxjs';
 })
 export class FormService {
 
-  private apiUrl = 'http://localhost:8000/';
 
-  username: any = '';
-  password: any = '';
-  invalidPassword : boolean = false;
+  constructor(private http: HttpClient) {
+    this.getUsername()
+  }
 
-  name = '';
+  public apiUrl = 'http://localhost:8000/';
+  public username!: string ;
+  public password: string = '';
+  public invalidPassword : boolean = false;
+
   userExist :boolean = false;
-  private taskList = this.http.get<any>(this.apiUrl+this.name);
 
+  setUsername(username: string): void {
+    sessionStorage.setItem("username", username);
+  }
 
-  constructor(private http: HttpClient) { }
+  getUsername(): any {
+    this.username = sessionStorage.getItem("username") || '';
+  }
+
+  clearUsername(): void {
+    sessionStorage.removeItem("username");
+  }
+
+  updateTask(index: number): any {
+    if (index >=0) {
+        //want to code
+    }
+  }
+
 
   getTasks(): Observable<any> {
-    return this.http.get(this.apiUrl+ "tasklist/" +this.name )
+    return this.http.get(this.apiUrl+ "tasklist/" +this.username )
   }
 
   addTask(task: any){
     // this.taskList.push(task);
-    return this.http.post(`${this.apiUrl}tasklist/${this.name}`, task )
+    return this.http.post(`${this.apiUrl}tasklist/${this.username}`, task )
   }
 
   login(username: string,password : string): Observable<any> {
@@ -34,7 +52,7 @@ export class FormService {
       username,
       password
     }
-    this.name = username;
+    this.username = username;
 
     return this.http.post<any>(`${this.apiUrl}login` , loginData)
   }

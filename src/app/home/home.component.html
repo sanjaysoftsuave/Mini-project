@@ -1,8 +1,8 @@
 <div class="container">
-  <h1>Welcome {{name}}!</h1>
+  <h1 style="text-align: center;" class="mt-5">Welcome {{name}}!</h1>
   <form #taskForm="ngForm" (ngSubmit)="add()">
     <div class="mb-3">
-      <label for="task" class="form-label">Task</label>
+      <label for="task" class="form-label"><h4>Task Description</h4></label>
       <input
         type="text"
         id="task"
@@ -13,27 +13,17 @@
       />
     </div>
 
-    <!-- <div class="mb-3 form-check">
-      <input
-        type="checkbox"
-        id="status"
-        name="status"
-        class="form-check-input"
-        [(ngModel)]="status"
-      />
-      <label for="status" class="form-check-label">Completed</label>
-    </div> -->
-
-    <button type="submit" class="btn btn-primary">Add Task</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!taskForm.valid">Add Task</button>
   </form>
 
-  <!-- Task List -->
   <table class="table mt-4">
     <thead>
       <tr>
         <th>Sno</th>
         <th>Task</th>
         <th>Status</th>
+        <th>Update</th>
+        <th>Delete</th>
       </tr>
     </thead>
     <tbody>
@@ -41,7 +31,13 @@
         <td>{{ i + 1 }}</td>
         <td>{{ task.task }}</td>
         <td>
-          <input type="checkbox" [checked]="task.status" disabled />
+          <input type="checkbox" [checked]="task.status" [disabled]="true"/>
+        </td>
+        <td>
+          <button class="btn btn-success">Update</button>
+        </td>
+        <td>
+          <button class="btn btn-danger">Delete</button>
         </td>
       </tr>
     </tbody>

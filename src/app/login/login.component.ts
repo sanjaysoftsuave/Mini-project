@@ -9,16 +9,15 @@ import { FormService } from '../_services/form.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  username = this.formService.username;
-  password = this.formService.password;
-  invalidPassword = this.formService.invalidPassword;
+  public username = this.formService.username;
+  public password = this.formService.password;
+  public invalidPassword = this.formService.invalidPassword;
 
   constructor(private router: Router, private formService : FormService) {
 
   }
 
   onSubmit(form: NgForm) {
-    console.log(form.valid)
     if (form.valid) {
       this.authenticate()
     }
@@ -27,7 +26,7 @@ export class LoginComponent implements OnInit {
   authenticate() {
     this.formService.login(this.username, this.password).subscribe({
       next:(res) => {
-          console.log('Login successful');
+          this.formService.setUsername(this.username)
           this.invalidPassword = false;
           this.router.navigate(['/home']);
       },

@@ -7,7 +7,7 @@ import { FormService } from '../_services/form.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  name = this.formService.name
+  name = this.formService.username
   taskItem = {task : '', status : false}
   taskList: any[] = []
 
@@ -18,12 +18,10 @@ export class HomeComponent implements OnInit {
   getList() {
     this.formService.getTasks().subscribe({
       next: (res) => {
-        console.log(res)
-        this.taskList = [...res]
-        console.log(this.taskList)
+        this.taskList = res
       },
       error: (err) => {
-        console.log(err)
+        alert("Oops! Something went wrong...")
       }
     })
   }
@@ -35,8 +33,8 @@ export class HomeComponent implements OnInit {
   add() {
     this.formService.addTask(this.taskItem).subscribe({
       next: (res) => {
-        console.log(res, "<= Response")
-        alert("Added ")
+        this.getList()
+        // alert("Added ")
       },
       error: (err) => {
         console.log(err, "<= Error")

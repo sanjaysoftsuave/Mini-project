@@ -29,7 +29,7 @@ export class RegisterComponent {
       next: (res) => {
         console.log(res)
         this.formService.userExist = false
-        this.formService.name = username;
+        this.formService.username = username;
         this.router.navigate(['/home']);
       },
       error:(error) => {
