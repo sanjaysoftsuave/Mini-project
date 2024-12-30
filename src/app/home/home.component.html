@@ -1,5 +1,8 @@
 <div class="container">
   <h1 style="text-align: center;" class="mt-5">Welcome {{name}}!</h1>
+  <div class="logout-container">
+    <button class="btn btn-danger" (click)="logOut()">Logout</button>
+  </div>
   <form #taskForm="ngForm" (ngSubmit)="add()">
     <div class="mb-3">
       <label for="task" class="form-label"><h4>Task Description</h4></label>
@@ -33,10 +36,10 @@
           <input type="checkbox" [checked]="task.status" [disabled]="true"/>
         </td>
         <td>
-          <button class="btn btn-success">Update</button>
+          <button (click)="openEditDialog(task,i)" class="btn btn-success">Update</button>
         </td>
         <td>
-          <button class="btn btn-danger">Delete</button>
+          <button (click)="deleteTask(i)" class="btn btn-danger">Delete</button>
         </td>
       </tr>
     </tbody>

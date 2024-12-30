@@ -27,14 +27,14 @@ export class FormService {
     this.username = sessionStorage.getItem("username") || '';
   }
 
-  clearUsername(): void {
-    sessionStorage.removeItem("username");
-  }
 
-  updateTask(index: number): any {
-    if (index >=0) {
-        //want to code
-    }
+
+  updateTask(index: number, updatedTask : any): any {
+    console.log(index,updatedTask)
+    console.log(`${this.apiUrl}${this.username}/${index}`)
+    return this.http.put(`${this.apiUrl}${this.username}/${index}`,{
+      updatedTask: updatedTask
+    })
   }
 
 
@@ -56,6 +56,13 @@ export class FormService {
 
     return this.http.post<any>(`${this.apiUrl}login` , loginData)
   }
+
+  delete(index: any): Observable<any> {
+    console.log(this.username)
+    return this.http.delete(`${this.apiUrl}${this.username}/tasks/${index}`)
+  }
+
+
 
   create(username: string, password: string): Observable<any> {
     const userData = {

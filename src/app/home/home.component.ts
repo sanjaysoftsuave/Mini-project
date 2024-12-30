@@ -1,5 +1,12 @@
 import { Component,OnInit  } from '@angular/core';
 import { FormService } from '../_services/form.service';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatdialogComponent } from '../matdialog/matdialog.component';
+
+
+// import { MatDialog } from '@angular/material/dialog';
+// import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +18,49 @@ export class HomeComponent implements OnInit {
   taskItem = {task : '', status : false}
   taskList: any[] = []
 
-  constructor(private formService: FormService) {
+  editIndex : number | null = null;
 
+  constructor(private formService: FormService, private router : Router, private dialog: MatDialog) {
+
+  }
+
+  openEditDialog(task: any, index: number): void {
+    const dialogRef = this.dialog.open(MatdialogComponent, {
+      width: '400px',
+      data: { task: task.task, status: task.status }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.update(index, result);
+      }
+    });
+  }
+
+  update(index: number, updatedTask: any): void {
+    this.taskList[index] = updatedTask;
+    this.formService.updateTask(index, updatedTask).subscribe({
+      next: (res: any) => {
+        console.log(res)
+        this.getList()
+      },
+      error: (err : any) => {
+        console.log(err)
+      }
+    })
+  }
+
+
+  deleteTask(index: number) {
+    this.formService.delete(index).subscribe({
+      next: (res) => {
+        console.log(res)
+        this.getList()
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
   }
 
   getList() {
@@ -34,7 +82,7 @@ export class HomeComponent implements OnInit {
     this.formService.addTask(this.taskItem).subscribe({
       next: (res) => {
         this.getList()
-        // alert("Added ")
+        this.taskItem = {task : '', status : false}
       },
       error: (err) => {
         console.log(err, "<= Error")
@@ -43,4 +91,10 @@ export class HomeComponent implements OnInit {
   }
 
 
+  logOut() {
+    sessionStorage.removeItem("username");
+    this.formService.username = ''
+    this.router.navigate(['/login'])
+  }
 }
+

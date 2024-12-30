@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Edit Task</h2>
+<mat-dialog-content>
+  <form [formGroup]="taskForm">
+    <mat-form-field>
+      <input matInput placeholder="Task Description" formControlName="task">
+    </mat-form-field>
+
+    <mat-checkbox formControlName="status">Completed</mat-checkbox>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="onSave()" [disabled]="!taskForm.valid">Save</button>
+</mat-dialog-actions>

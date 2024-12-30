@@ -16,7 +16,8 @@ mongoose.connect('mongodb://localhost:27017/Mini-project',{
   console.error(`Error connecting to the database: ${err}`);
 })
 
-app.use(express.json())
+app.use(express.json());
+
 app.use(cors());
 
 //Register API
@@ -68,9 +69,44 @@ app.post('/login', async (req, res) => {
   }
 });
 
-//Home API
-app.get('/home', async(req,res) => {
+//Delete API
+app.delete('/:userName/tasks/:taskIndex', async(req,res) => {
+  const {userName,taskIndex} = req.params;
+  const user = await User.findOne({'username': userName});
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
 
+  if (taskIndex === -1) {
+    return res.status(404).json({ message: 'Task not found' });
+  }
+
+  user.taskList.splice(taskIndex,1);
+  await user.save();
+
+  res.status(200).json({ message: 'Task deleted successfully' });
+
+})
+
+//UpdateTask API
+app.put('/:username/:index', async(req,res) => {
+  try {
+    const {username,index} = req.params
+    const {updatedTask} = req.body
+    console.log(updatedTask, "Api working")
+    const user = await User.findOne({username});
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.taskList.splice(index,1,{task: updatedTask.task, status: updatedTask.status});
+    await user.save();
+    return res.status(200).json({ message: 'Task updated successfully' });
+
+  }
+  catch(err) {
+    return res.status(500).json({statusCode: 500, message: "Server Error"})
+  }
 })
 
 //Get Tasklist API
