@@ -93,6 +93,8 @@ export class HomeComponent implements OnInit {
 
   logOut() {
     sessionStorage.removeItem("username");
+    sessionStorage.removeItem("jwt");
+    this.formService.isAuthenticated = false;
     this.formService.username = ''
     this.router.navigate(['/login'])
   }

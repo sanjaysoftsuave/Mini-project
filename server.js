@@ -2,8 +2,12 @@ var express = require('express');
 var app = express();
 const cors = require('cors');
 const User = require('./models/user');
-const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
+
+const SECRET_KEY = 'user_secret_key';
+
 
 mongoose.connect('mongodb://localhost:27017/Mini-project',{
   useNewUrlParser: true,
@@ -33,10 +37,11 @@ app.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(400).json({statusCode:400, message: 'User registered successfully' });
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
       username,
-      password
+      password: hashedPassword
     });
 
     await newUser.save();
@@ -53,16 +58,23 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ username,password});
-    console.log(user)
+    const user = await User.findOne({ username});
 
-    if (user) {
-      res.status(200).json({statusCode:200, message: 'Login successful' });
-    } else {
-      res.status(401).json({
+    if (!user) {
+      return res.status(401).json({
         statusCode:401,
         message: 'Invalid username or password' });
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+
+    const token = jwt.sign({ id: user._id, username: user.username }, 'your_secret_key');
+
+    res.status(200).json({statusCode:200, message: 'Login successful',token: token });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });

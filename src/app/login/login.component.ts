@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
     this.formService.login(this.username, this.password).subscribe({
       next:(res) => {
           this.formService.setUsername(this.username)
+          sessionStorage.setItem("jwt", res.token);
           this.invalidPassword = false;
           this.router.navigate(['/home']);
       },

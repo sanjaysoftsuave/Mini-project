@@ -16,8 +16,13 @@ export class FormService {
   public username!: string ;
   public password: string = '';
   public invalidPassword : boolean = false;
+  public isAuthenticated = false;
 
   userExist :boolean = false;
+
+  isLoggedIn(): boolean {
+    return this.isAuthenticated;
+  }
 
   setUsername(username: string): void {
     sessionStorage.setItem("username", username);
@@ -53,6 +58,7 @@ export class FormService {
       password
     }
     this.username = username;
+    this.isAuthenticated = true;
 
     return this.http.post<any>(`${this.apiUrl}login` , loginData)
   }
