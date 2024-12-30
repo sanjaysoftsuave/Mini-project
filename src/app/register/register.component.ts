@@ -30,7 +30,16 @@ export class RegisterComponent {
         console.log(res)
         this.formService.userExist = false
         this.formService.username = username;
-        this.router.navigate(['/home']);
+        this.formService.login(username, password).subscribe({
+          next:(res) => {
+              this.formService.setUsername(username)
+              this.router.navigate(['/home']);
+          },
+          error:(error) => {
+            console.error('Login failed: Invalid credentials');
+          }
+        }
+        )
       },
       error:(error) => {
         console.log(error)
@@ -38,5 +47,6 @@ export class RegisterComponent {
         console.log(this.formService.userExist)
       }
     })
+
   }
 }
