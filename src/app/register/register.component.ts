@@ -32,8 +32,18 @@ export class RegisterComponent {
         this.formService.username = username;
         this.formService.login(username, password).subscribe({
           next:(res) => {
-              this.formService.setUsername(username)
-              this.router.navigate(['/home']);
+              this.formService.login(username,password).subscribe({
+                next:(res) => {
+                    this.formService.setUsername(username)
+                    sessionStorage.setItem("jwt", res.token);
+                    this.router.navigate(['/home']);
+                },
+                error:(error) => {
+                  console.error('Login failed: Invalid credentials');
+                }
+              }
+              )
+
           },
           error:(error) => {
             console.error('Login failed: Invalid credentials');
