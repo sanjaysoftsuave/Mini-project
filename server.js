@@ -122,30 +122,30 @@ app.put('/:username/:index', async(req,res) => {
 })
 
 //Get Tasklist API
-app.get('/tasklist/:username', async (req,res) => {
-  try {
-    const {username} = req.params;
-    const user = await User.findOne({username});
-    if (!user) {
-      return res.status(404).json({statusCode: 404, message: "User not found"})
-    }
-    res.json(user.taskList)
-    }
-  catch(err) {
-    return res.status(500).json({statusCode: 500, message: "Server Error"})
-  }
-})
+// app.get('/tasklist/:username', async (req,res) => {
+//   try {
+//     const {username} = req.params;
+//     const user = await User.findOne({username});
+//     if (!user) {
+//       return res.status(404).json({statusCode: 404, message: "User not found"})
+//     }
+//     res.json(user.taskList)
+//     }
+//   catch(err) {
+//     return res.status(500).json({statusCode: 500, message: "Server Error"})
+//   }
+// })
 
 //Add Task API
 app.post('/tasklist/:username', async (req,res) => {
   try {
     const {username} = req.params;
-    const { task, status} = req.body;
+    const { task, status, isPublic} = req.body;
     const user = await User.findOne({username});
     if (!user) {
       return res.status(404).json({statusCode: 404, message: "User not found"})
     }
-    const addedTask = user.taskList.push({task,status});
+    const addedTask = user.taskList.push({task,status,isPublic});
     await user.save();
 
     return res.status(201).json({ message: 'Task added successfully', task: addedTask });
@@ -154,6 +154,73 @@ app.post('/tasklist/:username', async (req,res) => {
     res.status(500).json({ error: 'Server error' });
   }
 })
+
+//Get Public Task
+// app.get('/public-tasks', async(req,res) => {
+//   try {
+
+//     // const userPrivateTask = await
+
+//     const users = await User.find(
+//       {'taskList.isPublic':true},
+//       {taskList: 1, username: 1}
+//     )
+
+//     const publicTasks = users.flatMap(user => {
+//       return user.taskList
+//       .filter(task => task.isPublic)
+//       .map(task => ({
+//         ...task.toObject(),
+//         createdBy: user.username
+//       }))
+//     });
+//     res.status(200).json(publicTasks,);
+//   }
+//   catch(error) {
+//     res.status(500).json({message: 'Server Error', error});
+//   }
+// })
+
+//Merged Api
+app.get('/tasklist/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+
+
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ statusCode: 404, message: "User not found" });
+    }
+
+
+    const users = await User.find(
+      { 'taskList.isPublic': true },
+      { taskList: 1, username: 1 }
+    );
+
+
+    const publicTasks = users.flatMap(user => {
+      return user.taskList
+        .filter(task => task.isPublic)
+        .map(task => ({
+          ...task.toObject(),
+          createdBy: user.username
+        }));
+    });
+
+    const userTasks = user.taskList;
+
+
+    res.status(200).json({
+      publicTasks,
+      userTasks
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ statusCode: 500, message: "Server Error" });
+  }
+});
 
 app.listen(8000,(error) => {
   if (error) {

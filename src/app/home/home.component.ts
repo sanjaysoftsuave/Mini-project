@@ -15,7 +15,7 @@ import { MatdialogComponent } from '../matdialog/matdialog.component';
 })
 export class HomeComponent implements OnInit {
   name = this.formService.username
-  taskItem = {task : '', status : false}
+  taskItem = {task : '', status : false, isPublic: false}
   taskList: any[] = []
 
   editIndex : number | null = null;
@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
   getList() {
     this.formService.getTasks().subscribe({
       next: (res) => {
-        this.taskList = res
+        this.taskList = res.userTasks
       },
       error: (err) => {
         alert("Oops! Something went wrong...")
@@ -82,7 +82,7 @@ export class HomeComponent implements OnInit {
     this.formService.addTask(this.taskItem).subscribe({
       next: (res) => {
         this.getList()
-        this.taskItem = {task : '', status : false}
+        this.taskItem = {task : '', status : false, isPublic: false}
       },
       error: (err) => {
         console.log(err, "<= Error")

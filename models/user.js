@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   taskList: [{
     task: { type: String, required: true },
-    status: { type: Boolean, default: false }
+    status: { type: Boolean, default: false },
+    isPublic: { type: Boolean, default: false }
   }]
 });
 

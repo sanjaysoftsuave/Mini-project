@@ -16,6 +16,17 @@
       />
     </div>
 
+    <div class="mb-3 form-check">
+      <input
+        type="checkbox"
+        id="isPublic"
+        name="isPublic"
+        class="form-check-input"
+        [(ngModel)]="taskItem.isPublic"
+      />
+      <label class="form-check-label" for="isPublic"><h4>Is Public</h4></label>
+    </div>
+
     <button type="submit" class="btn btn-primary" [disabled]="!taskForm.valid">Add Task</button>
   </form>
   <table class="table mt-4">
@@ -44,4 +55,5 @@
       </tr>
     </tbody>
   </table>
+  <app-public-task></app-public-task>
 </div>

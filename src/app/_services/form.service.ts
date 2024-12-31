@@ -20,6 +20,9 @@ export class FormService {
 
   userExist :boolean = false;
 
+
+
+
   isLoggedIn(): boolean {
     return this.isAuthenticated;
   }
@@ -35,8 +38,6 @@ export class FormService {
 
 
   updateTask(index: number, updatedTask : any): any {
-    console.log(index,updatedTask)
-    console.log(`${this.apiUrl}${this.username}/${index}`)
     return this.http.put(`${this.apiUrl}${this.username}/${index}`,{
       updatedTask: updatedTask
     })
@@ -49,6 +50,7 @@ export class FormService {
 
   addTask(task: any){
     // this.taskList.push(task);
+    this.getTasks()
     return this.http.post(`${this.apiUrl}tasklist/${this.username}`, task )
   }
 

@@ -1,0 +1,64 @@
+<div class="public-tasks-container">
+  <h2>Public Tasks</h2>
+
+
+  <div *ngIf="publicTasks.length === 0" class="no-tasks-message">
+    No public tasks available.
+  </div>
+
+
+  <ol *ngIf="publicTasks.length > 0">
+    <li *ngFor="let task of publicTasks" class="task-item">
+      <div class="task-details">
+        <h3>{{ task.task }}</h3>
+        <p>Status: <span [class.completed]="task.status">{{ task.status ? 'Completed' : 'Pending' }}</span></p> <!-- Task status -->
+        <p><strong>Created by:</strong> {{ task.createdBy }}</p> <!-- Creator's name -->
+      </div>
+    </li>
+  </ol>
+</div>
+
+
+<style>
+  .public-tasks-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .no-tasks-message {
+    font-size: 18px;
+    color: #888;
+  }
+
+  .task-item {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .task-details h3 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .task-details p {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+
+  .completed {
+    color: green;
+  }
+
+  .task-item p {
+    margin-bottom: 0;
+  }
+</style>
